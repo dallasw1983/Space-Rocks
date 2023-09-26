@@ -187,7 +187,6 @@ func change_state(new_state):
 func _on_gun_cool_down_timeout():
 	can_shoot = true
 
-
 func _on_body_entered(body):
 	if body.is_in_group("rocks"): #or body.is_in_group("bullet_enemy"):
 		shield -= body.size * 25
@@ -208,7 +207,6 @@ func explode_size(size):
 
 func _on_invulnerable_timer_timeout():
 	change_state(ALIVE)
-
 
 func _on_shield_recharge_delay_timeout():
 	shield_recharge_ready = true

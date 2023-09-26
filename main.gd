@@ -18,7 +18,9 @@ func _ready():
 	screensize = get_viewport().get_visible_rect().size
 
 func new_game():
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	get_tree().call_group("rocks", "queue_free")
+	get_tree().call_group("enemies", "queue_free")
 	level = 0
 	score = 0
 	enemy_timer = 0.5
@@ -59,17 +61,22 @@ func _input(event):
 			quit_confirm()
 		else:
 			get_tree().quit()
+	if Input.is_action_pressed("game_over"):
+		$Player.set_lives(0)
 		
 func game_over():
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	playing = false
 	$HUD.game_over()
 	$EnemyTimer.stop()
+	past_level = 0
 	
 func pause_game_play():
 	get_tree().paused = not get_tree().paused
 	var message = $HUD/VBoxContainer/Message
 	quit_ready = false
-	if get_tree().paused:
+	if get_tree().paused:	
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		message.text = "Paused"
 		message.show()
 		get_tree().call_group("hittable", "pause_tree")
@@ -77,6 +84,7 @@ func pause_game_play():
 		$Player/ShieldRechargeDelay.stop()
 		# need to be able to pause enemy ship and player shooting
 	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 		message.text = ""
 		message.hide()	
 		get_tree().call_group("hittable", "pause_tree")
@@ -95,7 +103,8 @@ func quit_confirm():
 func _process(delta):
 	if not playing:	
 		return
-	elif get_tree().get_nodes_in_group("rocks").size() == 0:
+	elif get_tree().get_nodes_in_group("rocks").size() == 0 \
+		 and get_tree().get_nodes_in_group("enemies").size() == 0:
 		new_level()
 	$HUD.update_score(score)
 	$HUD.update_wave(level)
