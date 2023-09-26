@@ -1,0 +1,13 @@
+res://main.tscn
+res://main.gd
+res://player.gd
+res://player.tscn
+res://rock.tscn
+res://hud.tscn
+res://enemy_paths.tscn
+res://enemy.tscn
+res://bullet_enemy.tscn
+res://bullet.tscn
+res://explosion.tscn
+res://Area2D.gd
+res://hud.gd
