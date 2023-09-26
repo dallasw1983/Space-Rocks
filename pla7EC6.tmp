@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://bxsk2bb8jppip"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_6pwdi"]
+[ext_resource type="Texture2D" uid="uid://ductaylr6d0jk" path="res://assets/player_ship.png" id="1_ieldt"]
+[ext_resource type="PackedScene" uid="uid://din8xxt7oywta" path="res://bullet.tscn" id="2_5nif5"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_q0o6w"]
+radius = 30.0
+
+[node name="Player" type="RigidBody2D"]
+gravity_scale = 0.0
+linear_damp = 1.0
+angular_damp = 1.0
+script = ExtResource("1_6pwdi")
+spin_power = 4000
+bullet_scene = ExtResource("2_5nif5")
+fire_rate = 0.01
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = 1.5708
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ieldt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_q0o6w")
+
+[node name="GunCoolDown" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[node name="Muzzle" type="Marker2D" parent="."]
+position = Vector2(17.795, -17)
+
+[node name="Muzzle2" type="Marker2D" parent="."]
+position = Vector2(17.795, 17)
+
+[connection signal="timeout" from="GunCoolDown" to="." method="_on_gun_cool_down_timeout"]
