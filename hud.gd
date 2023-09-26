@@ -8,6 +8,12 @@ signal start_game
 @onready var start_button = $VBoxContainer/StartButton
 @onready var shield_bar = $MarginContainer/HBoxContainer/HBoxContainer/ShieldBar
 @onready var energy_bar = $MarginContainer/HBoxContainer/HBoxContainer/GunCoolDown
+@onready var wave_count = $MarginContainer/HBoxContainer/HBoxContainer/WaveCounter
+
+func _ready():
+	energy_bar.value = 1
+	wave_count.text = str("0")
+	shield_bar.value = 1
 
 var bar_textures = {
 	"green" = preload("res://assets/bar_green_200.png"),
@@ -22,26 +28,25 @@ func _process(delta):
 	if !$GamePlayMusic.playing:
 		$GamePlayMusic.play()
 		
+func update_wave(value):
+	wave_count.text = str(value)
+	
 func update_shield(value):
-	if value >= 0.6:
-		shield_bar.texture_progress = bar_textures["green"]
+	shield_bar.texture_progress = bar_textures["green"]
 	if value < 0.4:
 		shield_bar.texture_progress = bar_textures["red"]
-	if value < 0.6:
+	if value < 0.6 and value > 0.4:
 		shield_bar.texture_progress = bar_textures["yellow"]
 	shield_bar.value = value
 	
 func update_energy_bar(value):
-	if value >= 0.6:
-		shield_bar.texture_progress = bar_textures["green"]
+	energy_bar.texture_progress = bar_textures["green"]
 	if value < 0.4:
-		shield_bar.texture_progress = bar_textures["red"]
-	if value < 0.6:
-		shield_bar.texture_progress = bar_textures["yellow"]
+		energy_bar.texture_progress = bar_textures["red"]
+	if value < 0.6 and value > 0.4:
+		energy_bar.texture_progress = bar_textures["yellow"]
 	energy_bar.value = value
 	
-	
-
 func show_message(text):
 	message.text = text
 	message.show()

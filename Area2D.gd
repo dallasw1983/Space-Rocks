@@ -25,3 +25,4 @@ func _on_body_entered(body):
 func _on_area_entered(area):
 	if area.is_in_group("enemies"):
 		area.take_damage(1)
+		queue_free()

@@ -23,7 +23,6 @@ enum { INIT, ALIVE, INVULNERABLE, DEAD }
 signal lives_changed
 signal dead
 signal shield_changed
-signal energy_changed
 
 var reset_pos = false
 var lives = 0: set = set_lives
@@ -38,6 +37,17 @@ var lin_damp = get_linear_damp()
 var paused = false
 var shield_recharge_ready = false
 var shield_last_value : float = 0
+
+func set_energy(value):
+	energy += value
+	if energy > energy_max:
+		energy = energy_max
+		
+func get_energy():
+	return energy
+	
+func get_energy_max():
+	return energy_max
 
 func set_shield(value):
 	value = min(value, max_shield)
@@ -87,7 +97,6 @@ func _process(delta):
 	shield_last_value = shield
 	if energy < energy_max and not paused:
 		energy += energy_regen * delta
-	energy_changed.emit(energy / energy_max)
 	
 func get_input():
 	thurst = Vector2.ZERO
