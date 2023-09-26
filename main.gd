@@ -58,6 +58,8 @@ func _input(event):
 func game_over():
 	playing = false
 	$HUD.game_over()
+	$EnemyTimer.stop()
+	
 	
 func _process(delta):
 	if not playing:	
