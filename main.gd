@@ -11,6 +11,12 @@ var score = 0
 var playing = false
 var enemy_timer = 0.5
 var quit_ready = false
+var choose_upgrade_active = false
+var debug = false
+
+signal upgrade_weapons_call
+signal upgrade_movement_call
+signal upgrade_defence_call
 
 func _ready():
 	$Player.hide()
@@ -29,7 +35,9 @@ func new_game():
 	$Player.show()
 	await $HUD/Timer.timeout
 	playing = true
-	$EnemyTimer.start(randf_range(5, 10))
+	if not debug:
+		$EnemyTimer.start(randf_range(5, 10))
+	new_level()
 	
 func new_level():
 	if past_level == level:
@@ -41,9 +49,20 @@ func new_level():
 		$Player.set_shield(200)
 		$HUD.show_message("Wave %s" % level)
 		await get_tree().create_timer(3).timeout
+		var s = 0
 		for i in level:
-			spawn_rock(i+1)
-		$EnemyTimer.start()
+#			if not debug:
+			spawn_rock(s + 1)
+			spawn_rock(s + 1)
+			if i > 2:
+				spawn_rock(s + 2)
+			if i > 4:
+				spawn_rock(s + 3)
+			if i > 6:
+				s+=1
+				spawn_rock(s + 4)
+		if not debug:
+			$EnemyTimer.start()
 		past_level = level
 		
 func _input(event):
@@ -70,6 +89,15 @@ func game_over():
 	$HUD.game_over()
 	$EnemyTimer.stop()
 	past_level = 0
+	choose_upgrade_active = false
+	
+func pause_timers():
+	$EnemyTimer.stop()
+	
+func resume_timers():
+	if $EnemyTimer.time_left:
+		$EnemyTimer.start()
+	
 	
 func pause_game_play():
 	get_tree().paused = not get_tree().paused
@@ -82,7 +110,7 @@ func pause_game_play():
 		get_tree().call_group("hittable", "pause_tree")
 		$EnemyTimer.stop()
 		$Player/ShieldRechargeDelay.stop()
-		# need to be able to pause enemy ship and player shooting
+		
 	else:
 		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 		message.text = ""
@@ -101,16 +129,51 @@ func quit_confirm():
 	quit_ready = !quit_ready
 	
 func _process(delta):
-	if not playing:	
-		return
-	elif get_tree().get_nodes_in_group("rocks").size() == 0 \
-		 and get_tree().get_nodes_in_group("enemies").size() == 0:
-		new_level()
+	if get_tree().get_nodes_in_group("rocks").size() == 0 \
+		and get_tree().get_nodes_in_group("enemies").size() == 0 \
+		and playing:
+		if not choose_upgrade_active:
+			new_level()
+		if choose_upgrade_active:
+			upgrade_choose()
+	if debug:
+		choose_upgrade_active = true
+	if get_tree().get_nodes_in_group("rocks").size() > 0 \
+		and playing:
+		choose_upgrade_active = true
+		
+			
 	$HUD.update_score(score)
 	$HUD.update_wave(level)
 	$HUD.update_energy_bar($Player.get_energy() / $Player.get_energy_max())
+
+func upgrade_choose():
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	pause_timers()
+	$UI_UpGrade.show_upgrade_ui()
 	
-func spawn_rock(size, pos=null, vel=null, minv=50, maxv=800):
+func upgrade_ui_close():
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	resume_timers()
+	$UI_UpGrade.hide_upgrade_ui()
+	choose_upgrade_active = false
+
+func upgrade_weapon():
+	print("upgrade weapons")
+	upgrade_weapons_call.emit()
+	upgrade_ui_close()
+	
+func upgrade_defence():
+	print("upgrade defence")
+	upgrade_defence_call.emit()
+	upgrade_ui_close()
+	
+func upgrade_movement():
+	print("upgrade movement")
+	upgrade_movement_call.emit()
+	upgrade_ui_close()
+
+func spawn_rock(size, pos=null, vel=null, minv=50, maxv=500):
 	if pos == null:
 		$RockPath/RockSpawn.progress = randi()
 		pos = $RockPath/RockSpawn.position

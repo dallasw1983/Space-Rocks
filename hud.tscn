@@ -41,11 +41,13 @@ theme_override_constants/margin_bottom = 20
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
 layout_mode = 2
+size_flags_vertical = 4
 theme_override_constants/separation = 100
 
 [node name="VBoxScore" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.5
 
 [node name="ScoreLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxScore"]
 layout_mode = 2
@@ -56,7 +58,7 @@ label_settings = SubResource("LabelSettings_tuur8")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 6
+size_flags_horizontal = 3
 theme_override_constants/separation = 25
 alignment = 1
 
@@ -74,10 +76,14 @@ value = 0.7
 texture_over = ExtResource("4_l61ch")
 texture_progress = ExtResource("5_ot7y2")
 
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+
 [node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/HBoxContainer"]
 layout_mode = 2
 texture = ExtResource("6_bj2yu")
 expand_mode = 3
+stretch_mode = 6
 
 [node name="GunCoolDown" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -89,6 +95,7 @@ texture_over = ExtResource("4_l61ch")
 texture_progress = ExtResource("5_ot7y2")
 
 [node name="Wave" type="Label" parent="MarginContainer/HBoxContainer/HBoxContainer"]
+visible = false
 layout_mode = 2
 text = "Wave:"
 label_settings = SubResource("LabelSettings_s3nin")

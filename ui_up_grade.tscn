@@ -1,0 +1,217 @@
+[gd_scene load_steps=8 format=3 uid="uid://d07l4h2n6qsy7"]
+
+[ext_resource type="FontFile" uid="uid://c4hicsre5fbja" path="res://assets/kenvector_future_thin.ttf" id="1_4x8ex"]
+[ext_resource type="Script" path="res://ui_up_grade.gd" id="1_8ow06"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_3l3je"]
+font = ExtResource("1_4x8ex")
+font_size = 72
+
+[sub_resource type="LabelSettings" id="LabelSettings_6j4m5"]
+font = ExtResource("1_4x8ex")
+font_size = 48
+
+[sub_resource type="LabelSettings" id="LabelSettings_jss5l"]
+font = ExtResource("1_4x8ex")
+font_size = 19
+
+[sub_resource type="LabelSettings" id="LabelSettings_p7xn8"]
+font = ExtResource("1_4x8ex")
+font_size = 19
+
+[sub_resource type="LabelSettings" id="LabelSettings_kde2u"]
+font = ExtResource("1_4x8ex")
+font_size = 19
+
+[node name="UI_UpGrade" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_8ow06")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -451.0
+offset_top = -167.0
+offset_right = 452.0
+offset_bottom = 342.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Choose Ship Upgrade"
+label_settings = SubResource("LabelSettings_3l3je")
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Defence" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Defence"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Defence/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+text = "Defence"
+label_settings = SubResource("LabelSettings_6j4m5")
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Defence/VBoxContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer/Defence/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Description" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Defence/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.37
+text = "Regeneration
+Capacity
+Recharge Delay"
+label_settings = SubResource("LabelSettings_jss5l")
+autowrap_mode = 2
+
+[node name="Control2" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer/Defence/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Attack" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Attack"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Attack/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+text = "Attack"
+label_settings = SubResource("LabelSettings_6j4m5")
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Attack/VBoxContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer/Attack/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Description" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Attack/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.37
+text = "Fire Rate
+Regeneration
+Energy Max"
+label_settings = SubResource("LabelSettings_p7xn8")
+autowrap_mode = 2
+
+[node name="Control2" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer/Attack/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Movement" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Movement"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Movement/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+text = "Movement"
+label_settings = SubResource("LabelSettings_6j4m5")
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Movement/VBoxContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer/Movement/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Description" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Movement/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.37
+text = "Thrust
+Turning
+Breaking"
+label_settings = SubResource("LabelSettings_kde2u")
+autowrap_mode = 2
+
+[node name="Control2" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer/Movement/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ButtonContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.1
+
+[node name="Defence" type="Button" parent="MarginContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+text = "Defence"
+
+[node name="Control2" type="Control" parent="MarginContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.1
+
+[node name="Attack" type="Button" parent="MarginContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+text = "Attack"
+
+[node name="Control3" type="Control" parent="MarginContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.1
+
+[node name="Movement" type="Button" parent="MarginContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+text = "Movement"
+
+[node name="Control4" type="Control" parent="MarginContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.1
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/ButtonContainer/Defence" to="." method="_on_defence_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/ButtonContainer/Attack" to="." method="_on_attack_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/ButtonContainer/Movement" to="." method="_on_movement_pressed"]

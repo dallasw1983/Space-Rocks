@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://d05byeyu7a5bw"]
+[gd_scene load_steps=9 format=3 uid="uid://d05byeyu7a5bw"]
 
 [ext_resource type="Texture2D" uid="uid://cqp8gt0rarjhe" path="res://assets/space_background.png" id="1_5gohc"]
 [ext_resource type="Script" path="res://main.gd" id="1_jp7uv"]
@@ -6,10 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://bxsk2bb8jppip" path="res://player.tscn" id="2_tut11"]
 [ext_resource type="PackedScene" uid="uid://cv3t11tyybhh7" path="res://enemy.tscn" id="4_81mcp"]
 [ext_resource type="PackedScene" uid="uid://bsakmxjayw8p3" path="res://hud.tscn" id="5_ujm7d"]
+[ext_resource type="PackedScene" uid="uid://d07l4h2n6qsy7" path="res://ui_up_grade.tscn" id="7_fvlcs"]
 
 [sub_resource type="Curve2D" id="Curve2D_gt3iu"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, -64, -64, 0, 0, 0, 0, 1984, -64, 0, 0, 0, 0, 1984, 1152, 0, 0, 0, 0, -64, 1152, 0, 0, 0, 0, -64, -64)
+"points": PackedVector2Array(0, 0, 0, 0, -19.0778, -87.1419, 0, 0, 0, 0, 1477.95, -76.6228, 0, 0, 0, 0, 1459.98, 710.201, 0, 0, 0, 0, -12.3395, 721.772, 0, 0, 0, 0, -19.0778, -86.09)
 }
 point_count = 5
 
@@ -21,17 +22,21 @@ player_scene = ExtResource("2_tut11")
 enemey_scene = ExtResource("4_81mcp")
 
 [node name="Background" type="Sprite2D" parent="."]
-position = Vector2(960, 540)
+position = Vector2(640.5, 361)
+scale = Vector2(0.667188, 0.668519)
 texture = ExtResource("1_5gohc")
 
 [node name="Player" parent="." instance=ExtResource("2_tut11")]
-position = Vector2(960, 543)
+position = Vector2(638, 352)
 
 [node name="RockPath" type="Path2D" parent="."]
+position = Vector2(-7.01254, 56.8421)
+scale = Vector2(0.890429, 0.950658)
 curve = SubResource("Curve2D_gt3iu")
 
 [node name="RockSpawn" type="PathFollow2D" parent="RockPath"]
-position = Vector2(-64, -64)
+position = Vector2(-19.0778, -87.1419)
+rotation = 0.00702648
 
 [node name="HUD" parent="." instance=ExtResource("5_ujm7d")]
 process_mode = 1
@@ -39,8 +44,16 @@ process_mode = 1
 [node name="EnemyTimer" type="Timer" parent="."]
 one_shot = true
 
+[node name="UI_UpGrade" parent="." instance=ExtResource("7_fvlcs")]
+
+[connection signal="upgrade_defence_call" from="." to="Player" method="upgrade_defence"]
+[connection signal="upgrade_movement_call" from="." to="Player" method="upgrade_movement"]
+[connection signal="upgrade_weapons_call" from="." to="Player" method="upgrade_weapons"]
 [connection signal="dead" from="Player" to="." method="game_over"]
 [connection signal="lives_changed" from="Player" to="HUD" method="update_lives"]
 [connection signal="shield_changed" from="Player" to="HUD" method="update_shield"]
 [connection signal="start_game" from="HUD" to="." method="new_game"]
 [connection signal="timeout" from="EnemyTimer" to="." method="_on_enemy_timer_timeout"]
+[connection signal="AttackUpgrade" from="UI_UpGrade" to="." method="upgrade_weapon"]
+[connection signal="DefenceUpgrade" from="UI_UpGrade" to="." method="upgrade_defence"]
+[connection signal="MovementUpgrade" from="UI_UpGrade" to="." method="upgrade_movement"]

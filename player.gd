@@ -3,22 +3,43 @@ extends RigidBody2D
 @onready var col : CollisionShape2D = $CollisionShape2D
 @onready var gun_cool_down = $GunCoolDown
 
+@export var bullet_scene : PackedScene
+
 enum { INIT, ALIVE, INVULNERABLE, DEAD }
 
-@export var engine_power = 500
-@export var spin_power = 4000
-@export var rotation_dir = 0
-@export var bullet_scene : PackedScene
-@export var fire_rate = 0.25
-@export var brake_power : float = 50.0
-@export var shoot_recoil = 50
-@export var shield_regen = 40
-@export var max_shield = 200
-@export var bullet_spread = 0.08
-@export var energy = 100.0
-@export var energy_regen = 2.0
-@export var shoot_energy = 1.0
-@export var energy_max = 100.0
+func upgrade_weapons():
+	fire_rate += 350
+	energy_regen += 8.0
+	energy_max += 30
+	gun_cool_down.start(100/fire_rate)
+	
+func upgrade_defence():
+	shield_regen += 8
+	max_shield += 50
+	shield_recharge_delay += 15
+	
+func upgrade_movement():
+	engine_power += 100
+	spin_power += 800
+	brake_power += 1
+
+var engine_power = 200
+var spin_power = 2000
+var brake_power : float = 1.0
+
+var shield_regen = 5
+var max_shield = 75
+var shield_recharge_delay : float = 10
+
+var fire_rate : float = 900
+var shoot_recoil = 25
+var bullet_spread = 0.012
+var energy_max = 50
+var energy = energy_max
+var energy_regen : float = 2.0
+var shoot_energy = 5.0
+
+var rotation_dir = 0
 
 signal lives_changed
 signal dead
@@ -79,14 +100,14 @@ func reset():
 func _ready():
 	change_state(ALIVE)
 	screensize = get_viewport_rect().size
-	gun_cool_down.wait_time = fire_rate
+	gun_cool_down.wait_time = 0.5
 	$Exhaust.emitting = false
 	$ShieldRecharge.emitting = false
 	
 func _process(delta):
 	get_input()
 	if shield < max_shield and shield_last_value != shield:
-		$ShieldRechargeDelay.start()
+		$ShieldRechargeDelay.start(100 / shield_recharge_delay)
 	if shield_recharge_ready and not paused:
 		shield += shield_regen * delta
 		$ShieldRecharge.emitting = true
@@ -181,6 +202,22 @@ func change_state(new_state):
 			$Sprite2D.hide()
 			linear_velocity = Vector2.ZERO
 			dead.emit()
+			engine_power = 200
+			spin_power = 2000
+			brake_power = 1.0
+
+			shield_regen = 5
+			max_shield = 75
+			shield_recharge_delay = 10
+
+			fire_rate = 100
+			shoot_recoil = 150
+			bullet_spread = 0
+			energy_max = 50
+			energy = energy_max
+			energy_regen = 2.0
+			shoot_energy = 5.0
+			gun_cool_down.start(100/fire_rate)
 	state = new_state
 
 

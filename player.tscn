@@ -31,9 +31,6 @@ linear_damp = 0.2
 angular_damp = 0.2
 script = ExtResource("1_6pwdi")
 bullet_scene = ExtResource("2_5nif5")
-fire_rate = 0.01
-brake_power = 2.0
-energy_regen = 8.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = 1.5708
