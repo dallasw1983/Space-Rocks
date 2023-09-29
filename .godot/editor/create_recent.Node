@@ -1,3 +1,4 @@
+Label
 TouchScreenButton
 Control
 Container
@@ -5,7 +6,6 @@ MarginContainer
 HBoxContainer
 VBoxContainer
 Button
-Label
 CanvasLayer
 CPUParticles2D
 Timer

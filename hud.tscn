@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bsakmxjayw8p3"]
+[gd_scene load_steps=19 format=3 uid="uid://bsakmxjayw8p3"]
 
 [ext_resource type="FontFile" uid="uid://c4hicsre5fbja" path="res://assets/kenvector_future_thin.ttf" id="1_737q2"]
 [ext_resource type="Script" path="res://hud.gd" id="1_wij03"]
@@ -11,6 +11,8 @@
 [ext_resource type="Texture2D" uid="uid://djf55xbd75b0j" path="res://assets/energy.png" id="6_bj2yu"]
 [ext_resource type="AudioStream" uid="uid://c4q38gwi8ns2j" path="res://assets/sounds/Funky-Gameplay_Looping.ogg" id="9_4dclb"]
 [ext_resource type="PackedScene" uid="uid://dmr0fcamx7t56" path="res://joystick/virtual_joystick.tscn" id="11_ddyle"]
+[ext_resource type="Texture2D" uid="uid://dsnsfhr2xvgf8" path="res://assets/touch_button.png" id="12_b770d"]
+[ext_resource type="Texture2D" uid="uid://cpcwat660ip7v" path="res://assets/touch_button_pressed.png" id="13_cyqvd"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_tuur8"]
 font = ExtResource("1_737q2")
@@ -24,12 +26,11 @@ font_size = 48
 font = ExtResource("1_737q2")
 font_size = 64
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_gkhgv"]
-width = 113
-height = 113
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_kesst"]
-radius = 67.42
+radius = 60.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_khw7y"]
+font = ExtResource("1_737q2")
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_wij03")
@@ -89,9 +90,9 @@ layout_mode = 2
 
 [node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 texture = ExtResource("6_bj2yu")
-expand_mode = 3
-stretch_mode = 6
+stretch_mode = 3
 
 [node name="GunCoolDown" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -180,7 +181,7 @@ scale = Vector2(0.465, 0.465)
 visibility_mode = 1
 action_left = "rotate_left"
 action_right = "rotate_right"
-action_up = "thrust"
+action_up = "thurst"
 action_down = "down"
 
 [node name="ControlRight" type="Control" parent="."]
@@ -197,10 +198,21 @@ grow_vertical = 0
 
 [node name="TouchScreenButton" type="TouchScreenButton" parent="ControlRight"]
 position = Vector2(-134, -120)
-texture_normal = SubResource("NoiseTexture2D_gkhgv")
+texture_normal = ExtResource("12_b770d")
+texture_pressed = ExtResource("13_cyqvd")
 shape = SubResource("CircleShape2D_kesst")
+passby_press = true
 action = "shoot"
 visibility_mode = 1
+
+[node name="Label" type="Label" parent="ControlRight"]
+layout_mode = 0
+offset_left = -110.0
+offset_top = -81.0
+offset_right = -55.0
+offset_bottom = -55.0
+text = "Shoot"
+label_settings = SubResource("LabelSettings_khw7y")
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
