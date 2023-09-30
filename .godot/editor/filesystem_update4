@@ -11,3 +11,5 @@ res://ui_up_grade.tscn
 res://ui_up_grade.gd
 res://main.gd
 res://player.gd
+res://joystick/virtual_joystick.tscn
+res://joystick/virtual_joystick.gd

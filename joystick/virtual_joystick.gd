@@ -130,6 +130,8 @@ func _update_joystick(touch_position: Vector2) -> void:
 			_update_input_action(action_down, output.y)
 		else:
 			_update_input_action(action_up, -output.y)
+	print("X:", output.x)
+	print("Y:", output.y)
 
 func _update_input_action(action:String, value:float):
 	if value > InputMap.action_get_deadzone(action):
