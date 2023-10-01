@@ -21,7 +21,6 @@ colors = PackedColorArray(0.38999, 0.113733, 0.00687391, 1, 0.847059, 0.439216, 
 colors = PackedColorArray(0.999993, 0.929791, 0.917739, 1, 0, 0.572464, 0.716297, 1)
 
 [node name="Player" type="RigidBody2D" groups=["hittable", "player"]]
-position = Vector2(240, 132)
 rotation = 1.5708
 mass = 150.0
 center_of_mass_mode = 1
@@ -67,8 +66,8 @@ stream = ExtResource("6_ro2yo")
 
 [node name="Exhaust" type="CPUParticles2D" parent="."]
 show_behind_parent = true
-position = Vector2(0, 23)
-rotation = 1.5708
+position = Vector2(-25, 0)
+rotation = 3.14159
 amount = 25
 lifetime = 0.35
 local_coords = true

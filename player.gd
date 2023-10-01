@@ -48,17 +48,16 @@ func _integrate_forces(state):
 	
 	var horizontal_input = 0
 	var vertical_input = 0
-	# Call the default _integrate_forces function
-#	_integrate_forces(state)
-
-	if Input.is_action_pressed("move_right"):
-		horizontal_input += 1
-	if Input.is_action_pressed("move_left"):
-		horizontal_input -= 1
-	if Input.is_action_pressed("move_down"):
-		vertical_input += 1
-	if Input.is_action_pressed("move_up"):
-		vertical_input -= 1
+	
+	if not paused:
+		if Input.is_action_pressed("move_right"):
+			horizontal_input += 1
+		if Input.is_action_pressed("move_left"):
+			horizontal_input -= 1
+		if Input.is_action_pressed("move_down"):
+			vertical_input += 1
+		if Input.is_action_pressed("move_up"):
+			vertical_input -= 1
 # Calculate torque based on horizontal input and angular velocity
 	var torque_value = horizontal_input * (base_torque + torque_multiplier * abs(angular_velocity))
 	apply_torque(torque_value)
@@ -74,14 +73,14 @@ func _integrate_forces(state):
 	# Calculate rotation based on linear velocity
 	var linear_velocity = get_linear_velocity()
 	var rotation_angle = atan2(linear_velocity.y, linear_velocity.x)
-	var desired_rotation = rotation_angle - PI / 2  # Adjust for sprite alignment if necessary
-
+	var desired_rotation = rotation_angle - PI / 2  
+	
 	# Calculate torque to align with the desired rotation
 	var current_rotation = get_rotation()
 	var torque_to_apply = (desired_rotation - current_rotation) * base_torque
 	apply_torque(torque_to_apply)
 	
-	# Update the sprite's rotation angle
+	# Update the players's rotation angle
 	rotation_degrees = rotation_angle * 180 / PI
 	
 	# Wrap the RigidBody2D when it reaches the edges of the viewport
@@ -172,8 +171,11 @@ func _process(delta):
 func get_input():
 	if state in [DEAD, INIT]:
 		return
-	if Input.is_action_pressed("thurst") and not paused:
-		thurst = transform.x * force * 150
+	if Input.is_action_pressed("move_up") or \
+	Input.is_action_pressed("move_down") or \
+	Input.is_action_pressed("move_left") or \
+	Input.is_action_pressed("move_right") and \
+	not paused:
 		$Exhaust.emitting = true
 		if not $EngineSound.playing:
 			$EngineSound.play()
@@ -181,17 +183,9 @@ func get_input():
 			$EngineSound.stop()
 	else:
 		$Exhaust.emitting = false
-	if Input.is_action_pressed("ui_down"):
-		thurst = transform.x * -force * 150
 	rotation_dir = Input.get_axis("rotate_left","rotate_right")
 	if Input.is_action_pressed("shoot") and can_shoot and not paused:
 		shoot()
-	if Input.is_action_just_pressed("down"):
-		set_angular_damp(brake_power)
-		set_linear_damp(brake_power)
-	if Input.is_action_just_released("down"):
-		set_angular_damp(ang_damp)
-		set_linear_damp(lin_damp)
 				
 func shoot():
 	if energy < shoot_energy:
@@ -236,22 +230,6 @@ func change_state(new_state):
 			$Sprite2D.hide()
 			linear_velocity = Vector2.ZERO
 			dead.emit()
-			force = 200
-			base_torque = 2000
-			brake_power = 1.0
-
-			shield_regen = 5
-			max_shield = 75
-			shield_recharge_delay = 10
-
-			fire_rate = 100
-			shoot_recoil = 150
-			bullet_spread = 0
-			energy_max = 50
-			energy = energy_max
-			energy_regen = 2.0
-			shoot_energy = 5.0
-			gun_cool_down.start(100/fire_rate)
 	state = new_state
 
 
