@@ -22,8 +22,8 @@ player_scene = ExtResource("2_tut11")
 enemey_scene = ExtResource("4_81mcp")
 
 [node name="Background" type="Sprite2D" parent="."]
-position = Vector2(640.5, 361)
-scale = Vector2(0.667188, 0.668519)
+position = Vector2(1307, 733.5)
+scale = Vector2(1.42396, 1.48611)
 texture = ExtResource("1_5gohc")
 
 [node name="Player" parent="." instance=ExtResource("2_tut11")]

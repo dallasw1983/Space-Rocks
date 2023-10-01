@@ -12,6 +12,8 @@ config_version=5
 
 config/name="Space Rocks"
 run/main_scene="res://main.tscn"
+config/auto_accept_quit=false
+config/quit_on_go_back=false
 config/features=PackedStringArray("4.1", "Mobile")
 config/icon="res://icon.svg"
 
@@ -19,8 +21,9 @@ config/icon="res://icon.svg"
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
-window/stretch/mode="viewport"
-window/stretch/aspect="keep_height"
+window/energy_saving/keep_screen_on=false
+window/stretch/mode="canvas_items"
+window/handheld/orientation=6
 
 [input]
 
