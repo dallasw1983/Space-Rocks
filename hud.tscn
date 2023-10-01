@@ -179,10 +179,10 @@ offset_right = 349.0
 offset_bottom = 120.0
 scale = Vector2(0.465, 0.465)
 visibility_mode = 1
-action_left = "rotate_left"
-action_right = "rotate_right"
-action_up = "thurst"
-action_down = "down"
+action_left = "move_left"
+action_right = "move_right"
+action_up = "move_up"
+action_down = "move_down"
 
 [node name="ControlRight" type="Control" parent="."]
 layout_mode = 3

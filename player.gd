@@ -7,25 +7,10 @@ extends RigidBody2D
 
 enum { INIT, ALIVE, INVULNERABLE, DEAD }
 
-func upgrade_weapons():
-	fire_rate += 350
-	energy_regen += 8.0
-	energy_max += 30
-	gun_cool_down.start(100/fire_rate)
-	
-func upgrade_defence():
-	shield_regen += 8
-	max_shield += 50
-	shield_recharge_delay += 15
-	
-func upgrade_movement():
-	engine_power += 100
-	spin_power += 800
-	brake_power += 1
-
-var engine_power = 200
-var spin_power = 2000
+var force = 200.0
+var base_torque = 2000.0
 var brake_power : float = 1.0
+var torque_multiplier = 1000.0
 
 var shield_regen = 5
 var max_shield = 75
@@ -59,6 +44,72 @@ var paused = false
 var shield_recharge_ready = false
 var shield_last_value : float = 0
 
+func _integrate_forces(state):
+	
+	var horizontal_input = 0
+	var vertical_input = 0
+	# Call the default _integrate_forces function
+#	_integrate_forces(state)
+
+	if Input.is_action_pressed("move_right"):
+		horizontal_input += 1
+	if Input.is_action_pressed("move_left"):
+		horizontal_input -= 1
+	if Input.is_action_pressed("move_down"):
+		vertical_input += 1
+	if Input.is_action_pressed("move_up"):
+		vertical_input -= 1
+# Calculate torque based on horizontal input and angular velocity
+	var torque_value = horizontal_input * (base_torque + torque_multiplier * abs(angular_velocity))
+	apply_torque(torque_value)
+
+	# Apply a constant force for horizontal movement
+	var force_direction = Vector2(horizontal_input, 0)
+	apply_central_impulse(force_direction * force)
+
+	# Apply a constant force for vertical movement
+	var vertical_force_direction = Vector2(0, vertical_input)
+	apply_central_impulse(vertical_force_direction * force)
+
+	# Calculate rotation based on linear velocity
+	var linear_velocity = get_linear_velocity()
+	var rotation_angle = atan2(linear_velocity.y, linear_velocity.x)
+	var desired_rotation = rotation_angle - PI / 2  # Adjust for sprite alignment if necessary
+
+	# Calculate torque to align with the desired rotation
+	var current_rotation = get_rotation()
+	var torque_to_apply = (desired_rotation - current_rotation) * base_torque
+	apply_torque(torque_to_apply)
+	
+	# Update the sprite's rotation angle
+	rotation_degrees = rotation_angle * 180 / PI
+	
+	# Wrap the RigidBody2D when it reaches the edges of the viewport
+	var xform = state.transform
+	xform.origin.x = wrapf(xform.origin.x, 0, screensize.x)
+	xform.origin.y = wrapf(xform.origin.y, 0, screensize.y)
+	state.transform = xform
+	if reset_pos:
+		state.transform.origin = screensize / 2
+		reset_pos = false
+
+	
+func upgrade_weapons():
+	fire_rate += 350
+	energy_regen += 8.0
+	energy_max += 30
+	gun_cool_down.start(100/fire_rate)
+	
+func upgrade_defence():
+	shield_regen += 8
+	max_shield += 50
+	shield_recharge_delay += 15
+	
+func upgrade_movement():
+	force += 100
+	base_torque += 800
+	brake_power += 1
+	
 func set_energy(value):
 	energy += value
 	if energy > energy_max:
@@ -96,7 +147,6 @@ func reset():
 	lives = 3
 	change_state(ALIVE)
 	
-
 func _ready():
 	change_state(ALIVE)
 	screensize = get_viewport_rect().size
@@ -120,11 +170,10 @@ func _process(delta):
 		energy += energy_regen * delta
 	
 func get_input():
-	thurst = Vector2.ZERO
 	if state in [DEAD, INIT]:
 		return
 	if Input.is_action_pressed("thurst") and not paused:
-		thurst = transform.x * engine_power * 150
+		thurst = transform.x * force * 150
 		$Exhaust.emitting = true
 		if not $EngineSound.playing:
 			$EngineSound.play()
@@ -133,7 +182,7 @@ func get_input():
 	else:
 		$Exhaust.emitting = false
 	if Input.is_action_pressed("ui_down"):
-		thurst = transform.x * -engine_power * 150
+		thurst = transform.x * -force * 150
 	rotation_dir = Input.get_axis("rotate_left","rotate_right")
 	if Input.is_action_pressed("shoot") and can_shoot and not paused:
 		shoot()
@@ -153,8 +202,6 @@ func shoot():
 	can_shoot = false
 	gun_cool_down.start()
 	thurst = transform.x * -shoot_recoil * 150
-#	$Muzzle.transform.rotation = 0.0
-#	$Muzzle.set_rotation_degrees(0)
 	if alt_shoot:
 		var b = bullet_scene.instantiate()
 		get_tree().root.add_child(b)
@@ -171,19 +218,6 @@ func shoot():
 		$LaserSound.play()
 	alt_shoot = !alt_shoot
 
-func _physics_process(delta):
-	constant_force = thurst
-	constant_torque = rotation_dir * spin_power * 150
-
-func _integrate_forces(physics_state):
-	var xform = physics_state.transform
-	xform.origin.x = wrapf(xform.origin.x, 0, screensize.x)
-	xform.origin.y = wrapf(xform.origin.y, 0, screensize.y)
-	physics_state.transform = xform
-	if reset_pos:
-		physics_state.transform.origin = screensize / 2
-		reset_pos = false
-	
 func change_state(new_state):
 	match new_state:
 		INIT:
@@ -202,8 +236,8 @@ func change_state(new_state):
 			$Sprite2D.hide()
 			linear_velocity = Vector2.ZERO
 			dead.emit()
-			engine_power = 200
-			spin_power = 2000
+			force = 200
+			base_torque = 2000
 			brake_power = 1.0
 
 			shield_regen = 5
